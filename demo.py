@@ -1,13 +1,17 @@
+import yaml
 from notion_client import Client
 import requests
 import json
 
 # 🔐 获取 Notion Token 和 Database ID
 # ntn_o31628992033r9lgU0h148O033gIqHNmTF7H22LxTL19E7
-notion_token = input('请输入你的 Notion API Token: ')
-# database_id =
+# 读取 YAML 文件
+with open('config.yaml', 'r', encoding='utf-8') as file:
+    config = yaml.safe_load(file)
 
-database_id = input('请输入数据库 ID: ')
+notion_token = config['NOTION_TOKEN']
+database_id = config['DATABASE_ID']
+
 
 # 🧠 提示词模板（可自定义）
 prompt_template = "请帮我写一篇关于“{}”的旅游推荐文案，适合发布在小红书上，内容吸引人，有场景感。"
@@ -15,14 +19,14 @@ prompt_template = "请帮我写一篇关于“{}”的旅游推荐文案，适�
 import os
 from volcenginesdkarkruntime import Ark
 
-api_key = input('请输入火山模型apiKey')
+api_key = config['AI_KEY']
 # 请确保您已将 API Key 存储在环境变量 ARK_API_KEY 中
 # 初始化Ark客户端，从环境变量中读取您的API Key
 client = Ark(
     # 此为默认路径，您可根据业务所在地域进行配置
     base_url="https://ark.cn-beijing.volces.com/api/v3",
     # 从环境变量中获取您的 API Key。此为默认方式，您可根据需要进行修改
-    api_key="",
+    api_key=api_key,
 )
 # 初始化 Notion 客户端
 notion = Client(auth=notion_token)
